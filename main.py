@@ -1,6 +1,7 @@
 import speech_recognition as sr
 import webbrowser
 import pyttsx3
+from youtubesearchpython import VideosSearch
 
 
 recognitizer = sr.Recognizer()
@@ -19,8 +20,36 @@ def processCommand(c):
         webbrowser.open("https://codechef.com")
     elif "open facebook" in c.lower():
         webbrowser.open("https://facebook.com")
+    elif c.lower().startswith("play"):
+        song = c.lower().replace("play", "") 
+        # for play on youtube
+        webbrowser.open(f"https://www.youtube.com/results?search_query={song}")
+    elif "juli" in c.lower():
+        speak("which song do you want to listen")
+        def search_and_play_youtube(query, limit=1):
+            videosSearch = VideosSearch(query, limit=limit)
+            results = videosSearch.result()
+            if results and 'result' in results and len(results['result']) > 0:
+                first_result = results['result'][0]
+                video_link = first_result['link']
+                print(f"Opening: {video_link}")
+                webbrowser.open(video_link)
+            else:
+                print("No results found.")
+        with sr.Microphone() as source:
+                    speak("Please say the song name")
+                    audio = r.listen(source)
+                    command = r.recognize_google(audio)
+        search_and_play_youtube(command)
+       
+
+    elif "open github" in c.lower():
+        webbrowser.open("https://github.com/cssatyam")
+        
+        
         
 if __name__ == "__main__":
+    print("initializing jarvis...")
     speak('initializing jarvis...')
     
     while True:
@@ -41,6 +70,7 @@ if __name__ == "__main__":
                 # listen the command
                 with sr.Microphone() as source:
                     print("Active Jarvis...")
+                    speak("Active Jarvis...")
                     audio = r.listen(source)
                     command = r.recognize_google(audio)
                     
@@ -49,7 +79,7 @@ if __name__ == "__main__":
             
         except sr.UnknownValueError:
             print("Google Speech Recognition could not understand the audio")
-            speak("speak again..sir..")
+            
             
             
             
